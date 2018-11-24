@@ -2,6 +2,26 @@
     <div ref="map" style="width:100vw; height:100vh"></div>
 </template>
 
+
+<style>
+.marker{
+  width:100px;
+  height:100px;
+  background-color:red;
+  border-radius: 50%;
+  border: 5px solid red;
+  background-size: cover;
+  background-position: center center;
+  transition: all 0.4s ease-in-out;
+}
+.marker-expanded{
+  width:100vw;
+  height:100vh;
+  border-radius: 0;
+  border: 0;
+}
+</style>
+
 <script>
 export default {
   props: [""],
@@ -31,34 +51,43 @@ export default {
         defaultLayers.terrain.panorama,
         {
           center: { lat: 52.06, lng: 19.25 },
-          zoom:5.75,
+          zoom: 5.75,
           pixelRatio: pixelRatio
         }
       );
     },
 
-    addMarkersAndSetViewBounds() {
-      // create map objects
-      // Add the first marker
-      var svgMarkup = `<svg  width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-        <rect stroke="black" fill="blue" x="1" y="1" width="22" height="22" />
-        <text x="12" y="18" font-size="12pt" font-family="Arial" font-weight="bold"
-        text-anchor="middle" fill="red" >C</text></svg>`;
-      const bearsIcon = new H.map.Icon(svgMarkup);
-      const toronto = new window.H.map.Marker(
-          {
-            lat: 50.052853,
-            lng: 19.928001
-          },
-          { icon: bearsIcon }
-        ),
-        boston = new window.H.map.Marker({ lat: 51.9, lng: 19.5 }),
-        washington = new window.H.map.Marker({ lat: 51.2, lng: 19.2 }),
-        group = new window.H.map.Group();
+    addSingleMarker(url, lat, lng){
+      const icon =
+        '<div class="marker" style="background-image: url(\'' +
+        url +
+        "')\"></div>";
 
-      // add markers to the group
-      group.addObjects([toronto, boston, washington]);
-      this.map.addObject(group);
+      const myFunction = function() {
+        if (this.className === "marker") {
+          this.className += " marker-expanded";
+        } else {
+          this.className = "marker";
+        }
+      };
+
+      const domIcon = new H.map.DomIcon(icon, {
+        // the function is called every time marker enters the viewport
+        onAttach: function(clonedElement, domIcon, domMarker) {
+          clonedElement.addEventListener("click", myFunction, false);
+        }
+      });
+
+      const coords = { lat, lng };
+      const domMarker = new window.H.map.DomMarker(coords, {icon: domIcon})
+      return domMarker;
+      // group.addObject(domIcon);
+    },
+    addMarkersAndSetViewBounds() {
+      const group = new window.H.map.Group();
+      const marker = this.addSingleMarker('http://www.shomler.com/calsj/image02/4d9_4644.jpg', 52.06, 19.25);
+
+      this.map.addObject(marker);
 
       // get geo bounding box for the group and set it to the map
       // this.map.setViewBounds(group.getBounds());
