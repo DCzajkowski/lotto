@@ -1,5 +1,5 @@
 <template>
-<div id="nav-icon4" class='cosik' :class="clicked ? 'open' : ''" v-on:click="clicked=!clicked">
+<div id="nav-icon4" :class="clicked ? 'open' : ''" v-on:click="clicked=!clicked">
   <span></span>
   <span></span>
   <span></span>
@@ -7,9 +7,6 @@
 </template>
 
 <style>
-.cosik{
-    transform: scale(0.1,0.1);
-}
 #nav-icon1, #nav-icon2, #nav-icon3, #nav-icon4 {
   width: 60px;
   height: 45px;
@@ -32,7 +29,7 @@
   position: absolute;
   height: 9px;
   width: 100%;
-  background: white;
+  background: #f78d1d;
   border-radius: 9px;
   opacity: 1;
   left: 0;

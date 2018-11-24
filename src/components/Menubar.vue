@@ -15,17 +15,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    height: 60px;
     width: calc(100vw - 30px);
     position: absolute;
     padding: 0px 15px;
     top: 0;
-    z-index: 1;
-    background: linear-gradient(180deg, rgba(43, 43, 43,0.7) 0%, rgba(0, 0, 0,0) 100%);
+    z-index: 2;
+    color: #f78d1d;
+    /* background: linear-gradient(180deg, rgba(43, 43, 43,0.7) 0%, rgba(0, 0, 0,0) 100%); */
+    background-color: white;
+    box-shadow: 0 0 5px #333;
 }
 .logo{
     height: 60px;
-    margin: 10px 0px; 
+    margin-bottom: 10px;
     width: 100px;
     background-size: contain;
     background-position: center center;
@@ -42,7 +45,7 @@
 .ticketnr{
     font-size: 24px;
     font-weight: 700;
-    color: white;
+    color: #f78d1d;
 
 }
 .ticket{

@@ -4,7 +4,11 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    expanded: true,
+    prize: 0,
+    photo: false,
+  },
   mutations: {},
   actions: {}
 });

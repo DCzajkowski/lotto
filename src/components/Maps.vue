@@ -1,5 +1,5 @@
 <template>
-      <div ref="map" style="position:relative; width:100vw; height:100vh; z-index:0"></div>
+      <div ref="map"  style="position:relative; width:100vw; height:100vh; z-index:0"></div> 
 </template>
 
 
@@ -23,6 +23,7 @@
   /* background-size: contain;
   background-repeat: no-repeat; */
 }
+
 </style>
 
 <script>
@@ -72,14 +73,18 @@ export default {
       }
       const icon = `<div class="marker" style="background-image: url('${url}'); width: ${size}px; height: ${size}px">`
         
+      const state = this.$store.state  
       const myFunction = function() {
         if (this.className === "marker") {
           this.className += " marker-expanded";
+          state.photo = true;
         } else {
           this.className = "marker";
+          state.photo = false;
         }
       };
 
+      
       const domIcon = new H.map.DomIcon(icon, {
         // the function is called every time marker enters the viewport
         onAttach: function(clonedElement, domIcon, domMarker) {
