@@ -22,7 +22,7 @@ export default new Router({
     },
     {
       path: "/camera",
-      name: "camera",
+      name: "Camera",
       component: () => import("./views/Camera.vue")
     }
   ]
