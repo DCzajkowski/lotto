@@ -16,7 +16,10 @@
     <div v-if="showPicture" @click="send" class="send-button">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
     </div>
-    <div v-if="cameraOpen && cameraOptions.length > 1" @click="toggleCamera" class="toggle-camera">
+    <div v-if="showPicture" @click="closePicture" class="close-button">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"/></svg>
+    </div>
+    <div v-if="cameraOpen && !showPicture && cameraOptions.length > 1" @click="toggleCamera" class="toggle-camera">
       <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
     </div>
     <div v-if="cameraOpen && !showPicture" @click="takePicture" class="capture-image">
@@ -48,6 +51,11 @@
       },
     },
     methods: {
+      closePicture() {
+        this.context.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+        this.showPicture = false
+        this.imageURL = null
+      },
       async send() {
         // make a request with this.imageURL
       },
@@ -84,7 +92,7 @@
       takePicture() {
         this.showPicture = true
 
-        this.context.drawImage(this.$refs.video, 0, (this.$refs.canvas.height - this.$refs.video.videoHeight), this.windowWidth, this.windowWidth * this.$refs.video.videoHeight / this.$refs.video.videoWidth)
+        this.context.drawImage(this.$refs.video, 0, 0, this.windowWidth, this.windowWidth * this.$refs.video.videoHeight / this.$refs.video.videoWidth)
         this.imageURL = this.$refs.canvas.toDataURL('image/jpeg')
       },
       async init() {
@@ -140,8 +148,8 @@
 
   .toggle-camera {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
   }
 
   .toggle-camera .icon {
@@ -185,7 +193,7 @@
   }
 
   .send-button {
-    background: #2249ac;
+    background: #ffd500;
     border-radius: 50%;
     bottom: 30px;
     right: 30px;
@@ -198,9 +206,24 @@
   }
 
   .send-button .icon {
-    fill: white;
+    fill: #2249ac;
     width: 24px;
     height: 24px;
     transform: translateX(1px);
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .close-button .icon {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    fill: #fff;
+    padding: 16px;
+    width: 24px;
+    height: 24px;
   }
 </style>
