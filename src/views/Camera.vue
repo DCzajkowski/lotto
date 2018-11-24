@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg">
     <video
       ref="video"
       :width="windowWidth"
@@ -7,19 +7,23 @@
       playsinline
       autoplay
     ></video>
-    <!-- <canvas ref="canvas" :width="windowWidth" :height="windowHeight"></canvas> -->
-    <img ref="photo" src="">
-    <!-- <button type="button" @click="takePicture">Take Picture</button> -->
+    <canvas ref="canvas" class="canvas" :width="windowWidth" :height="windowHeight"></canvas>
+    <img ref="photo" :src="imageURL" v-show="showPicture" class="picture">
     <div v-if="!cameraOpen" @click="openCamera" class="open-camera">
       <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
       <p>Open Camera</p>
     </div>
-    <div v-if="cameraOpen" @click="toggleCamera" class="toggle-camera">
+    <div v-if="showPicture" @click="send" class="send-button">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+    </div>
+    <div v-if="cameraOpen && cameraOptions.length > 1" @click="toggleCamera" class="toggle-camera">
       <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
     </div>
-    <!-- <select v-model="selectedCameraOption">
-      <option :value="option" v-for="option in cameraOptions">{{ option.name }}</option>
-    </select> -->
+    <div v-if="cameraOpen && !showPicture" @click="takePicture" class="capture-image">
+      <div class="capture-image-2">
+        <div class="capture-image-3"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,13 +31,12 @@
   export default {
     data() {
       return {
-        video: null,
-        photo: null,
         cameraOptions: [],
         selectedCameraOption: null,
         cameraOpen: false,
-        // context: null,
-        // canvas: null,
+        showPicture: false,
+        imageURL: null,
+        context: null,
       }
     },
     computed: {
@@ -45,6 +48,9 @@
       },
     },
     methods: {
+      async send() {
+        // make a request with this.imageURL
+      },
       toggleCamera() {
         let index = this.cameraOptions.indexOf(this.selectedCameraOption) + 1
 
@@ -52,11 +58,7 @@
           index = 0
         }
 
-        console.log(index)
-
         this.selectedCameraOption = this.cameraOptions[index]
-
-        console.log(this.selectedCameraOption)
 
         this.openCamera()
       },
@@ -75,31 +77,27 @@
             },
           })
 
-        console.log(window.stream)
-
         this.$refs.video.srcObject = window.stream
 
         this.cameraOpen = true
       },
       takePicture() {
-        // this.context.drawImage(this.video, 0, 0, 400, 300)
-        // this.$refs.photo.setAttribute('src', this.canvas.toDataUrl('image/png'))
+        this.showPicture = true
+
+        this.context.drawImage(this.$refs.video, 0, (this.$refs.canvas.height - this.$refs.video.videoHeight), this.windowWidth, this.windowWidth * this.$refs.video.videoHeight / this.$refs.video.videoWidth)
+        this.imageURL = this.$refs.canvas.toDataURL('image/jpeg')
       },
       async init() {
         const cameraOptions = await navigator.mediaDevices.enumerateDevices()
 
         this.cameraOptions = cameraOptions.filter(option => option.kind === 'videoinput')
         this.selectedCameraOption = this.cameraOptions[0] // this.cameraOptions.length - 1
-
-        console.log(this.cameraOptions)
-        console.log(this.selectedCameraOption)
       },
     },
     mounted() {
       this.init()
 
-      // this.canvas = this.$refs.canvas
-      // this.context = this.$refs.canvas.getContext('2d')
+      this.context = this.$refs.canvas.getContext('2d')
     },
   }
 </script>
@@ -108,6 +106,14 @@
   /*video {
     outline: 1px solid red;
   }*/
+
+  .canvas {
+    display: none;
+  }
+
+  .bg {
+    background: #000;
+  }
 
   .open-camera {
     position: absolute;
@@ -143,5 +149,58 @@
     border-radius: 50%;
     fill: #fff;
     padding: 16px;
+  }
+
+  .capture-image {
+    position: absolute;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 6px solid #fff;
+  }
+
+  .capture-image-2 {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+
+  .capture-image-3 {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 50%;
+  }
+
+  .picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .send-button {
+    background: #2249ac;
+    border-radius: 50%;
+    bottom: 30px;
+    right: 30px;
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .send-button .icon {
+    fill: white;
+    width: 24px;
+    height: 24px;
+    transform: translateX(1px);
   }
 </style>
