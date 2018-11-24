@@ -110,17 +110,17 @@
   }
 </script>
 
-<style scoped>
-  /*video {
-    outline: 1px solid red;
-  }*/
+<style scoped lang="scss">
+  $black: #000;
+  $yellow: #ffd500;
+  $blue: #2249ac;
 
   .canvas {
     display: none;
   }
 
   .bg {
-    background: #000;
+    background: $black;
   }
 
   .open-camera {
@@ -133,7 +133,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: #ffd500;
+    background: $yellow;
   }
 
   .open-camera p {
@@ -143,7 +143,7 @@
 
   .open-camera .icon {
     width: 128px;
-    fill: #2249ac;
+    fill: $blue;
   }
 
   .toggle-camera {
@@ -193,7 +193,7 @@
   }
 
   .send-button {
-    background: #ffd500;
+    background: $yellow;
     border-radius: 50%;
     bottom: 30px;
     right: 30px;
@@ -206,7 +206,7 @@
   }
 
   .send-button .icon {
-    fill: #2249ac;
+    fill: $blue;
     width: 24px;
     height: 24px;
     transform: translateX(1px);
