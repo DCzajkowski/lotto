@@ -1,24 +1,27 @@
 <template>
-    <div ref="map" style="width:100vw; height:100vh"></div>
+      <div ref="map" style="position:relative; width:100vw; height:100vh; z-index:0"></div>
 </template>
 
 
 <style>
 .marker{
-  width:100px;
-  height:100px;
-  background-color:red;
+  background-color:white;
   border-radius: 50%;
-  border: 5px solid red;
+  border: 3px solid white;
   background-size: cover;
   background-position: center center;
   transition: all 0.4s ease-in-out;
+  z-index: 0 !important;
 }
 .marker-expanded{
-  width:100vw;
-  height:100vh;
+  width:100vw !important;
+  height:100vh !important;
   border-radius: 0;
   border: 0;
+  transform: none !important;
+  z-index: 1 !important;
+  /* background-size: contain;
+  background-repeat: no-repeat; */
 }
 </style>
 
@@ -44,8 +47,6 @@ export default {
         ppi: pixelRatio === 1 ? undefined : 320
       });
 
-      console.log(defaultLayers);
-
       this.map = new window.H.Map(
         this.$refs.map,
         defaultLayers.terrain.panorama,
@@ -56,13 +57,21 @@ export default {
         }
       );
     },
-
-    addSingleMarker(url, lat, lng){
-      const icon =
-        '<div class="marker" style="background-image: url(\'' +
-        url +
-        "')\"></div>";
-
+    createMarker(url, lat, lng, place){
+      let size = 50;
+      switch (place){
+        case 1:
+          size = 50;
+          break;
+        case 2:
+          size = 35;
+          break;
+        case 3:
+          size = 20;
+          break;  
+      }
+      const icon = `<div class="marker" style="background-image: url('${url}'); width: ${size}px; height: ${size}px">`
+        
       const myFunction = function() {
         if (this.className === "marker") {
           this.className += " marker-expanded";
@@ -81,13 +90,16 @@ export default {
       const coords = { lat, lng };
       const domMarker = new window.H.map.DomMarker(coords, {icon: domIcon})
       return domMarker;
-      // group.addObject(domIcon);
     },
     addMarkersAndSetViewBounds() {
       const group = new window.H.map.Group();
-      const marker = this.addSingleMarker('http://www.shomler.com/calsj/image02/4d9_4644.jpg', 52.06, 19.25);
 
-      this.map.addObject(marker);
+      const marker2 = this.createMarker('https://blogs.nvidia.com/wp-content/uploads/2017/02/ai-podcast-social-tw-li-2048x1024.jpg', 53.439540, 14.526695,1);
+      const marker = this.createMarker('http://www.shomler.com/calsj/image02/4d9_4644.jpg', 50.121739, 20.027037,2);
+      const marker3 = this.createMarker('http://www.shomler.com/calsj/image02/4d9_4644.jpg', 52.232278, 21.063353,3);
+
+
+      this.map.addObjects([marker,marker2,marker3]);
 
       // get geo bounding box for the group and set it to the map
       // this.map.setViewBounds(group.getBounds());
