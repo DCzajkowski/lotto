@@ -9,7 +9,7 @@
         <h2>{{ slot.title }}</h2> 
         <div class='slot__window'> 
             <div class='slot__wrap'> 
-                <div class='slot__item' v-for='item in slot.items' :key="item.id">
+                <div class='slot__item' :style="item.id == 7 ? 'border: 3px solid red' : ''"  :class="['gold', 'silver', 'bronze'][slot.id]" v-for='item in slot.items' :key="item.id">
                     
 
 
@@ -30,13 +30,9 @@
 
                 </div> 
 
-                <div class='slot__item slot__item--copy' >
-                    
-
+                <div class='slot__item slot__item--copy' :class="['gold', 'silver', 'bronze'][slot.id]" >
+                
                         <img id="avatar" :src="slot.items[0].avatarUrl" alt="">
-
-                    
-
                     <p class="playerName">
                         {{slot.items[0].name}}
                         
@@ -44,8 +40,8 @@
 
 
                     </div>
-                    </div> 
-                    </div> 
+                </div> 
+            </div> 
                     </div> 
                     </div>
 
@@ -252,10 +248,10 @@ export default {
   margin: 0.4em;
 }
 
-*{
-    margin:0px;
-    padding: 0px;
-    max-width: 100vw;
+* {
+  margin: 0px;
+  padding: 0px;
+  max-width: 100vw;
 }
 .slot__window {
   background-color: white;
@@ -301,5 +297,18 @@ export default {
   display: inline-block;
   /* float: left; */
 }
-</style>
 
+
+.gold {
+  background-color: gold;
+}
+
+.silver {
+
+  background-color: silver;
+}
+
+.bronze {
+  background-color: brown;
+}
+</style>
