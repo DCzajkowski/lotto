@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import axios from 'axios';
   export default {
     data() {
       return {
@@ -55,8 +56,44 @@
         this.showPicture = false
         this.imageURL = null
       },
+      async sendPhoto() {
+        const data = new FormData();
+        const blob = this.dataURItoBlob(this.imageURL)
+        data.append('photo', blob);
+
+        let lat = this.$store.state.location.lat
+        let lon = this.$store.state.location.lon
+        
+        const response = await fetch(`https://backend.photolotto.tk/frontend/v1/tasks/current/solutions/?lat=${lat}&lon=${lon}&username=${'Romek'}`, {
+          method: 'POST',
+          body: data,
+          })
+        
+        const text = await response.text()
+        this.$store.state.success = text.slice(1,-1) 
+      },
+      dataURItoBlob(dataURI) {
+          // convert base64/URLEncoded data component to raw binary data held in a string
+          var byteString;
+          if (dataURI.split(',')[0].indexOf('base64') >= 0)
+              byteString = atob(dataURI.split(',')[1]);
+          else
+              byteString = unescape(dataURI.split(',')[1]);
+
+          // separate out the mime component
+          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+          // write the bytes of the string to a typed array
+          var ia = new Uint8Array(byteString.length);
+          for (var i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+          }
+
+          return new Blob([ia], {type:mimeString});
+      },
       async send() {
         // make a request with this.imageURL
+        this.sendPhoto();
         this.$store.state.phase = 3
         this.$router.push({name: 'home'})
       },
@@ -105,8 +142,12 @@
     },
     mounted() {
       this.init()
-
       this.context = this.$refs.canvas.getContext('2d')
+
+       navigator.geolocation.getCurrentPosition(  position => {
+          this.$store.state.location.lat = position.coords.latitude
+          this.$store.state.location.lon = position.coords.longitude
+        })
     },
   }
 </script>

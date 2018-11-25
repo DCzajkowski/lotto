@@ -12,6 +12,8 @@ export default new Vuex.Store({
     task: {},
     tickets: 5,
     old: 0,
+    success: '',
+    location: {lat: null, lon: null,}
   },
   mutations: {},
   actions: {}

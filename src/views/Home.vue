@@ -15,9 +15,8 @@
         </div>
       </div>
 
-      <!-- <div v-else-if="$store.state.phase === 1" class='description'> -->
         <div v-else-if="$store.state.phase === 1" class='task'> 
-          <p class='tekst'>Sfotografuj zółty samochód</p> 
+          <p class='tekst'>{{$store.state.task.description}}</p> 
           <div class='aparat' @click="$router.push({name: 'Camera'})"></div>
         </div>
 
@@ -38,10 +37,23 @@
           </div>
         </div> 
 
-        <!-- <div v-else-if="$store.state.phase === 2" class='task'> 
+        <div v-else-if="$store.state.phase === 2" class='task'> 
           <p class='tekst'>Sfotografuj zółty samochód</p> 
           <div class='aparat'></div>
-        </div>  -->
+        </div> 
+
+        <div v-else-if="$store.state.phase === 3" class='task'> 
+          <p class='tekst'>Sfotografuj zółty samochód</p>
+          <div v-if="$store.state.success === 'ACCEPTED'">
+            <div class="ok"></div>
+          </div>
+          <div v-if="$store.state.success === 'NOT_ACCEPTABLE'">
+            <div class="row">
+              <div class="not_ok"></div>
+              <div @click="$router.push({name: 'Camera'})" class='aparat'></div>
+            </div>
+          </div>
+        </div> 
 
         <div class='footer'>Pula: {{$store.state.prize}}zł</div>
       </whitebox>
@@ -58,6 +70,34 @@ body{
   font-size: 20px;
   font-weight: 700;
   color:#f78d1d;
+}
+.ok{
+  height: 50px;
+  flex-grow:1;
+  margin: 20px auto 10px;
+  background-image: url('../assets/ok.svg');
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: slide_in 1s ease;
+  position: relative;
+}
+.not_ok{
+  height: 50px;
+  flex-grow:1;
+  margin: 0px auto 10px;
+  background-image: url('../assets/cross.svg');
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: slide_in 1s ease;
+  position: relative;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
 }
 .zakupy{
   align-items: center;
@@ -81,7 +121,8 @@ body{
 }
 .aparat{
   height: 80px;
-  margin: 10px auto;
+  flex-grow:1;
+  margin: 0px auto 10px;
   background-image: url('../assets/mono-gtk-camera.svg');
   background-position: center, center;
   background-repeat: no-repeat;
@@ -150,7 +191,7 @@ body{
 .task{
   position: absolute;
   top: 110px;
-  padding: 10px;
+  padding: 0px 10px;
   width: 320px;
   /* border: 1px solid rgb(220,220,220); */
   border-radius: 10px;
@@ -216,11 +257,15 @@ export default {
         this.$store.state.expanded = false;
     },
     incrementPrize(){
-        this.$store.state.prize += Math.round(Math.random() * 10)
+        if (this.getSecondsRemaining() <= 295) {
+          this.$store.state.prize += Math.round(Math.random() * 6)
+        }else{
+          this.$store.state.prize = 0
+        }
         setTimeout(this.incrementPrize, Math.round(Math.random() * 1400)) 
     },
     startTask(){
-      console.log('cos')
+      this.fetchTask();
       if (this.$store.state.tickets > 0){
         this.$store.state.phase+=1
         this.$store.state.tickets-=1
@@ -229,6 +274,20 @@ export default {
         this.$store.state.phase-=1
       }
     },
+    getSecondsRemaining() {
+        const currentMinute = new Date().getMinutes()
+
+        let finishDate = new Date()
+        finishDate = new Date(finishDate.setMinutes(currentMinute + 5 - Math.floor(currentMinute % 5)))
+        finishDate = finishDate.setSeconds(0)
+
+        return Math.floor((finishDate - Date.now()) / 1000)
+    },
+    async fetchTask() {
+      const response = await fetch('https://backend.photolotto.tk/frontend/v1/tasks/current/')
+
+      this.$store.state.task = await response.json()
+    },
     buy(ilosc){
       this.$store.state.tickets+=ilosc
       // this.$store.state.phase = this.$store.state.old
@@ -236,6 +295,10 @@ export default {
   },
   mounted(){
     this.incrementPrize();
+    navigator.geolocation.getCurrentPosition(position => {
+      this.$store.state.location.lat = position.coords.latitude
+      this.$store.state.location.lon = position.coords.longitude
+    })
   }
 
 };
