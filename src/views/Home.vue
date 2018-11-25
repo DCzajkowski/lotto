@@ -19,7 +19,7 @@
      
         <div v-else-if="$store.state.phase === 1" class='task'> 
           <p class='tekst'>Sfotografuj zółty samochód</p> 
-          <div class='aparat'></div>
+          <div class='aparat' @click="$router.push({name: 'Camera'})"></div>
         </div>
 
         <div v-else-if="$store.state.phase === -1" class='task'> 
@@ -210,12 +210,11 @@ export default {
   },
   methods: {
     hideWhitebox(){
-        console.log('adasd')
         this.$store.state.expanded = false;
     },
     incrementPrize(){
-        this.$store.state.prize += Math.round(Math.random() * 60)
-        setTimeout(this.incrementPrize, Math.round(Math.random() * 800));  
+        this.$store.state.prize += Math.round(Math.random() * 10)
+        setTimeout(this.incrementPrize, Math.round(Math.random() * 1400));  
     },
     startTask(){
       console.log('cos')

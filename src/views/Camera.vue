@@ -9,9 +9,8 @@
     ></video>
     <canvas ref="canvas" class="canvas" :width="windowWidth" :height="windowHeight"></canvas>
     <img ref="photo" :src="imageURL" v-show="showPicture" class="picture">
-    <div v-if="!cameraOpen" @click="openCamera" class="open-camera">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-      <p>Open Camera</p>
+    <div v-if="!cameraOpen" class="open-camera">
+      <div @click="openCamera" class='begin'>Begin</div>
     </div>
     <div v-if="showPicture" @click="send" class="send-button">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
@@ -22,7 +21,7 @@
     <div v-if="cameraOpen && !showPicture && cameraOptions.length > 1" @click="toggleCamera" class="toggle-camera">
       <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
     </div>
-    <div v-if="cameraOpen && !showPicture" @click="takePicture" class="capture-image">
+    <div v-if="!showPicture" @click="takePicture" class="capture-image">
       <div class="capture-image-2">
         <div class="capture-image-3"></div>
       </div>
@@ -58,6 +57,8 @@
       },
       async send() {
         // make a request with this.imageURL
+        this.$store.state.phase = 3
+        this.$router.push({name: 'home'})
       },
       toggleCamera() {
         let index = this.cameraOptions.indexOf(this.selectedCameraOption) + 1
@@ -122,7 +123,17 @@
   .bg {
     background: $black;
   }
+  .begin{
+    width: 200px;
+    height: 100px;
+    background-color: white;
+    border-radius: 50px;
+    text-align: center;
+    line-height: 100px;
+    font-size: 40px;
+    color: black;
 
+  }
   .open-camera {
     position: absolute;
     top: 0;
@@ -133,7 +144,8 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: $yellow;
+    background: transparent;
+    z-index: 1;
   }
 
   .open-camera p {
