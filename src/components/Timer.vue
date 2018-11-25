@@ -116,6 +116,9 @@
 
       setInterval(() => {
         this.secondsRemaining = this.getSecondsRemaining()
+        if (this.secondsRemaining <= 1){
+            this.$store.state.prize = 0
+        }
       }, 1000)
     },
   }

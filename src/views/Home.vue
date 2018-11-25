@@ -257,12 +257,13 @@ export default {
         this.$store.state.expanded = false;
     },
     incrementPrize(){
+      this.$store.state.prize += Math.round(Math.random() * 6)
         if (this.getSecondsRemaining() <= 295) {
-          this.$store.state.prize += Math.round(Math.random() * 6)
+          setTimeout(this.incrementPrize, Math.round(Math.random() * 1400)) 
         }else{
-          this.$store.state.prize = 0
+          setTimeout(this.incrementPrize, 5400) 
         }
-        setTimeout(this.incrementPrize, Math.round(Math.random() * 1400)) 
+      
     },
     startTask(){
       this.fetchTask();
