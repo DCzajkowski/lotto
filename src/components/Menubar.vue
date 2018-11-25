@@ -38,6 +38,8 @@
     height: 60px;
     /* margin-bottom: 10px; */
     width: 100px;
+    position: absolute;
+    left: calc(50% - 50px);
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
@@ -48,7 +50,7 @@
     height: 24px;
     display: flex;
     align-items: center;
-    width: 50px;
+
 }
 .ticketnr{
     font-size: 24px;
@@ -57,8 +59,8 @@
 
 }
 .ticket{
-    height: 24px;
-    width: 24px;
+    height: 20px;
+    width: 20px;
     margin-right: 6px;
     background-position: center center;
     background-repeat: no-repeat;
@@ -83,6 +85,7 @@ export default {
     },
     methods:{
         change(){
+            this.$store.state.expanded= true
             if (this.$store.state.phase != -1){
                 this.$store.state.old = this.$store.state.phase; this.$store.state.phase=-1;
             }else{

@@ -24,7 +24,6 @@
         <div v-else-if="$store.state.phase === -1" class='task'> 
           <div class="zakupy" @click="buy(1)">
             <p class="lol">2zł</p>
-            <p class="lol">--></p> 
             <div class="tickets">
                 <p class="ticketnr">1</p>  
                 <span class="ticket"/>  
@@ -32,7 +31,6 @@
           </div>
           <div class="zakupy" @click="buy(6)">
             <p class="lol">10zł</p>
-            <p class="lol">--></p> 
             <div class="tickets">
                 <p class="ticketnr">6</p>  
                 <span class="ticket"/>  
@@ -230,7 +228,7 @@ export default {
     },
     buy(ilosc){
       this.$store.state.tickets+=ilosc
-      this.$store.state.phase = this.$store.state.old
+      // this.$store.state.phase = this.$store.state.old
     }
   },
   mounted(){
