@@ -16,12 +16,37 @@
        </div>
       </div>
 
-      <div v-else-if="$store.state.phase === 1" class='description'> 
+     
+        <div v-else-if="$store.state.phase === 1" class='task'> 
+          <p class='tekst'>Sfotografuj zółty samochód</p> 
+          <div class='aparat'></div>
+        </div>
 
-      </div>
+        <div v-else-if="$store.state.phase === -1" class='task'> 
+          <div class="zakupy" @click="buy(1)">
+            <p class="lol">2zł</p>
+            <div class="tickets">
+                <p class="ticketnr">1</p>  
+                <span class="ticket"/>  
+            </div>
+          </div>
+          <div class="zakupy" @click="buy(6)">
+            <p class="lol">10zł</p>
+            <div class="tickets">
+                <p class="ticketnr">6</p>  
+                <span class="ticket"/>  
+            </div>
+          </div>
+        </div> 
 
-    </whitebox>
-  </div>
+        <!-- <div v-else-if="$store.state.phase === 2" class='task'> 
+          <p class='tekst'>Sfotografuj zółty samochód</p> 
+          <div class='aparat'></div>
+        </div>  -->
+
+        <div class='footer'>Pula: {{$store.state.prize}}zł</div>
+      </whitebox>
+    </div>
 </template>
 
 
@@ -29,6 +54,50 @@
 body{
   height: 100vh;
   overflow: hidden;
+}
+.lol{
+  font-size: 20px;
+  font-weight: 700;
+  color:#f78d1d;
+}
+.zakupy{
+  align-items: center;
+  width: 280px;
+  height: 30px;
+  padding: 5px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 4px #f78d1d;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px !important; 
+}
+
+.footer{
+  position: absolute;
+  bottom: 0px;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.aparat{
+  height: 80px;
+  margin: 10px auto;
+  background-image: url('../assets/mono-gtk-camera.svg');
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: slide_in 1s ease;
+  position: relative;
+}
+.tekst{
+  position: relative;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  animation: slide_in 1s ease;
 }
 .overlay{
   position: relative;
@@ -76,6 +145,15 @@ body{
   color: #999;
   padding: 5px 20px;
 }
+.task{
+  position: absolute;
+  top: 110px;
+  padding: 10px;
+  width: 320px;
+  /* border: 1px solid rgb(220,220,220); */
+  border-radius: 10px;
+  height: 140px;
+}
 .join{
   position: absolute;
   display: flex;
@@ -92,6 +170,16 @@ body{
   box-shadow: 0 0 0 0 rgba(247, 149, 29, 0.4);
   -webkit-animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
   animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+@keyframes slide_in{
+  0% {
+    top:-20px;
+    opacity: 0;
+  }
+  100% {
+    top:0px;
+    opacity: 1;
+  }
 }
 @keyframes pulse{
   50% {
@@ -131,7 +219,17 @@ export default {
     },
     startTask(){
       console.log('cos')
-      this.$store.state.phase+=1
+      if (this.$store.state.tickets > 0){
+        this.$store.state.phase+=1
+        this.$store.state.tickets-=1
+      }else{
+        this.old = this.$store.state.phase
+        this.$store.state.phase-=1
+      }
+    },
+    buy(ilosc){
+      this.$store.state.tickets+=ilosc
+      // this.$store.state.phase = this.$store.state.old
     }
   },
   mounted(){
