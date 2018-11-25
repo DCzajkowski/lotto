@@ -99,15 +99,27 @@ export default {
     addMarkersAndSetViewBounds() {
       const group = new window.H.map.Group();
 
-      const marker2 = this.createMarker('https://blogs.nvidia.com/wp-content/uploads/2017/02/ai-podcast-social-tw-li-2048x1024.jpg', 53.439540, 14.526695,1);
-      const marker = this.createMarker('http://www.shomler.com/calsj/image02/4d9_4644.jpg', 50.121739, 20.027037,2);
-      const marker3 = this.createMarker('http://www.shomler.com/calsj/image02/4d9_4644.jpg', 52.232278, 21.063353,3);
+      const marker2 = this.createMarker('https://notebooki.pl/16602-large_default/logitech-m720-triathlon-mouse-910-004791.jpg', 53.439540, 14.526695,1);
+      const marker = this.createMarker('https://www.mycenter.pl/kupic_img9/89/280x280__mysz-bezprzewodowa-xiaomi-portable-mouse-gold_494400413.jpg', 50.121739, 20.027037,2);
+      const marker3 = this.createMarker('https://pisces.bbystatic.com/image2/BestBuy_US/images/products/3435/3435677_sa.jpg', 52.232278, 21.063353,3);
+      const marker4 = this.createMarker('https://f01.esfr.pl/foto/6/8398573882/a1298a27b38cf3a5898b32faa5fc4d6b/tracer-ghost-le,8398573882_7.jpg', 54.381656, 18.646207,1);
+      const marker5 = this.createMarker('https://f00.esfr.pl/foto/4/14518491129/43b0488f84312c80ccdfb3e4e8d5b00c/steelseries-rival-300-cs-go-hyper-beast-edition,14518491129_7.jpg', 50.021325, 21.963452,2);
+      const marker6 = this.createMarker('https://f01.esfr.pl/foto/9/14189282985/981ec6323e55b8eba48f536ab24e74a0/logitech-m220-silent-szary,14189282985_7.jpg', 50.221067, 18.958526,3);
 
 
-      this.map.addObjects([marker,marker2,marker3]);
+      this.map.addObjects([marker,marker2,marker3,marker4,marker5,marker6]);
 
       // get geo bounding box for the group and set it to the map
       // this.map.setViewBounds(group.getBounds());
+    }
+  },
+  watch:{
+    "$store.state.winners"(winners){
+      console.log(winners);
+      for(win in  winners){
+        const marker = this.createMarker(winners[win].photoUrl,winners[win].latitude,winners[win].longitude, win+1)
+        this.map.addObjects([marker]);
+      }
     }
   },
   mounted() {

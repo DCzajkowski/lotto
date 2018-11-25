@@ -1,26 +1,28 @@
 <template>
   <div>
     <menubar/>
-    <div class="nagroda" :class="$store.state.photo ? 'nagroda-hidden' : ''" > Oni już wygrali!</div>
+    <div class="nagroda" :class="$store.state.photo ? 'nagroda-hidden' : ''" > They have already won!</div>
     <div :class="$store.state.expanded ? 'overlay': ''" @click.stop="hideWhitebox">
       <maps />
     </div>
     <whitebox class='box'>
-      <timer />
+      
+      <spinner v-if="$store.state.animation"/>
+      <timer v-if="!$store.state.animation"/>
 
-      <div v-if="$store.state.phase === 0" @click="startTask" class='join'> Rozpocznij zadanie za
+      <div v-if="$store.state.phase === 0 && !$store.state.animation" @click="startTask" class='join'> Start the task for
         <div class="tickets">
           <p class="ticketnr">1</p>
           <span class="ticket"/>
         </div>
       </div>
 
-        <div v-else-if="$store.state.phase === 1" class='task'> 
+        <div v-else-if="$store.state.phase === 1 && !$store.state.animation" class='task'> 
           <p class='tekst'>{{$store.state.task.description}}</p> 
           <div class='aparat' @click="$router.push({name: 'Camera'})"></div>
         </div>
 
-        <div v-else-if="$store.state.phase === -1" class='task'> 
+        <div v-else-if="$store.state.phase === -1 && !$store.state.animation" class='task'> 
           <div class="zakupy" @click="buy(1)">
             <p class="lol">2zł</p>
             <div class="tickets">
@@ -37,13 +39,13 @@
           </div>
         </div> 
 
-        <div v-else-if="$store.state.phase === 2" class='task'> 
-          <p class='tekst'>Sfotografuj zółty samochód</p> 
+        <div v-else-if="$store.state.phase === 2 && !$store.state.animation" class='task'> 
+          <p class='tekst'>{{$store.state.task.description}}</p> 
           <div class='aparat'></div>
         </div> 
 
-        <div v-else-if="$store.state.phase === 3" class='task'> 
-          <p class='tekst'>Sfotografuj zółty samochód</p>
+        <div v-else-if="$store.state.phase === 3 && !$store.state.animation" class='task'> 
+          <p class='tekst'>{{$store.state.task.description}}</p>
           <div v-if="$store.state.success === 'ACCEPTED'">
             <div class="ok"></div>
           </div>
@@ -55,7 +57,7 @@
           </div>
         </div> 
 
-        <div class='footer'>Pula: {{$store.state.prize}}zł</div>
+        <div v-if="!$store.state.animation" class='footer'>Pula: {{$store.state.prize}}zł</div>
       </whitebox>
     </div>
 </template>
@@ -114,7 +116,7 @@ body{
 
 .footer{
   position: absolute;
-  bottom: 0px;
+  bottom: 400px;
   font-weight: 700;
   font-size: 20px;
   margin-bottom: 20px;
@@ -243,14 +245,20 @@ import Maps from "@/components/Maps.vue";
 import Menubar from "@/components/Menubar.vue";
 import Whitebox from "@/components/Whitebox.vue";
 import Timer from "@/components/Timer.vue";
+import Spinner from "@/components/Spinner.vue";
 
 export default {
   name: "home",
+  data(){
+    return {
+    }
+  },
   components: {
     Maps,
     Menubar,
     Whitebox,
-    Timer
+    Timer,
+    Spinner
   },
   methods: {
     hideWhitebox(){

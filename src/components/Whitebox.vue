@@ -1,5 +1,5 @@
 <template>
-    <div class="whitebox" @click="$store.state.expanded = true" :class="$store.state.expanded ? 'expanded':''">
+    <div class="whitebox" @click="$store.state.expanded = true" :class="classes">
         <slot/>
     </div>
 </template>
@@ -8,7 +8,7 @@
     .whitebox{
         position: absolute;
         width: 100vw;
-        height: 300px;
+        height: 700px;
         background-color: white;
         z-index: 2;
         margin-top:  -60px;
@@ -18,11 +18,21 @@
     .expanded{
         margin-top:  -300px;
     }
+    .animating{
+        margin-top:  -450px;
+    }
 </style>
 
 <script>
 export default {
-
+    computed:{
+        classes(){
+            let classes='';
+            this.$store.state.expanded ? classes+='expanded':'';
+            this.$store.state.animation ? classes+=' animating':''
+            return classes
+        }
+    }
 }
 </script>
 

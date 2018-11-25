@@ -63,10 +63,10 @@
       },
       description() {
         if (this.secondsRemaining <= 295) {
-          return 'do końca zadania pozostało...'
+          return 'time left...'
         }
 
-        return 'trwa generacja nowego zadania...'
+        return 'wait for the next task...'
       },
     },
     methods: {
@@ -108,6 +108,10 @@
 
         return Math.floor((finishDate - Date.now()) / 1000)
       },
+      async askForWinners(){
+          const response = await fetch(`https://backend.photolotto.tk/frontend/v1/tasks/${this.$store.state.task.id}/winners/`)
+            this.$store.state.winners = await response.json()
+      }
     },
     created() {
       // this.start = new Date()
@@ -116,8 +120,11 @@
 
       setInterval(() => {
         this.secondsRemaining = this.getSecondsRemaining()
-        if (this.secondsRemaining <= 1){
+        if (this.secondsRemaining == 5*60){
             this.$store.state.prize = 0
+            this.$store.state.animation = true;
+
+            this.askForWinners()
         }
       }, 1000)
     },

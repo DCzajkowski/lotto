@@ -9,11 +9,15 @@ export default new Vuex.Store({
     prize: 0,
     photo: false,
     phase: 0,
-    task: {},
+    task: {
+      id: 0
+    },
+    taskId: 0,
     tickets: 5,
     old: 0,
     success: '',
-    location: {lat: null, lon: null,}
+    location: {lat: null, lon: null,},
+    animation: true
   },
   mutations: {},
   actions: {}
