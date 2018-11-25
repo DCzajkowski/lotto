@@ -8,6 +8,7 @@ export default new Vuex.Store({
     expanded: true,
     prize: 0,
     photo: false,
+    phase: 0,
   },
   mutations: {},
   actions: {}

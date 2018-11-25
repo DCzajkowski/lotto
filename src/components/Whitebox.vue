@@ -1,5 +1,7 @@
 <template>
-    <div class="whitebox" @click="$store.state.expanded = true" :class="$store.state.expanded ? 'expanded':''"></div>
+    <div class="whitebox" @click="$store.state.expanded = true" :class="$store.state.expanded ? 'expanded':''">
+        <slot/>
+    </div>
 </template>
 
 <style>
@@ -9,7 +11,7 @@
         height: 300px;
         background-color: white;
         z-index: 2;
-        margin-top:  -50px;
+        margin-top:  -60px;
         transition: margin 0.4s ease-in-out;
          box-shadow: 0 0 2px #666;
     }
