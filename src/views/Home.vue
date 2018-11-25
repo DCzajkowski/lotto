@@ -6,17 +6,16 @@
       <maps />
     </div>
     <whitebox class='box'>
-      <timer starttime="1544099999"/>
-      <div class='opis'>do końca zadania</div>
+      <timer />
 
-      <div v-if="$store.state.phase === 0" @click="startTask" class='join'> Rozpocznij zadanie 
+      <div v-if="$store.state.phase === 0" @click="startTask" class='join'> Rozpocznij zadanie za
         <div class="tickets">
-          <p class="ticketnr">1</p>  
-          <span class="ticket"/>  
-       </div>
+          <p class="ticketnr">1</p>
+          <span class="ticket"/>
+        </div>
       </div>
 
-     
+      <!-- <div v-else-if="$store.state.phase === 1" class='description'> -->
         <div v-else-if="$store.state.phase === 1" class='task'> 
           <p class='tekst'>Sfotografuj zółty samochód</p> 
           <div class='aparat' @click="$router.push({name: 'Camera'})"></div>
@@ -144,6 +143,9 @@ body{
   font-weight: 400;
   color: #999;
   padding: 5px 20px;
+  transform: translateX(-50%);
+  left: 50%;
+  width: 180px;
 }
 .task{
   position: absolute;
@@ -170,6 +172,7 @@ body{
   box-shadow: 0 0 0 0 rgba(247, 149, 29, 0.4);
   -webkit-animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
   animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+  margin-top: 32px;
 }
 @keyframes slide_in{
   0% {
@@ -214,7 +217,7 @@ export default {
     },
     incrementPrize(){
         this.$store.state.prize += Math.round(Math.random() * 10)
-        setTimeout(this.incrementPrize, Math.round(Math.random() * 1400));  
+        setTimeout(this.incrementPrize, Math.round(Math.random() * 1400)) 
     },
     startTask(){
       console.log('cos')
