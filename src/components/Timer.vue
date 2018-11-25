@@ -1,14 +1,18 @@
 <template>
-  <div ref="timer" class="timer" :class="$store.state.expanded ? 'timer-big':''">
-    <div class="minutes" :class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
-      {{ minutes }}
+  <div>
+    <div ref="timer" class="timer" :class="$store.state.expanded ? 'timer-big':''">
+      <div class="minutes" :class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
+        {{ minutes }}
+      </div>
+
+      <div class="colon">:</div>
+
+      <div class="seconds" :class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
+        {{ seconds }}
+      </div>
     </div>
 
-    <div class="colon">:</div>
-
-    <div class="seconds" :class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
-      {{ seconds }}
-    </div>
+    <div class="opis">{{ description }}</div>
   </div>
 </template>
 
@@ -32,6 +36,10 @@
     },
     computed: {
       minutes() {
+        if (this.secondsRemaining > 295) {
+          return '00'
+        }
+
         const minute = Math.floor(this.secondsRemaining / 60)
 
         if (minute < 10) {
@@ -41,6 +49,10 @@
         return minute
       },
       seconds() {
+        if (this.secondsRemaining > 295) {
+          return '00'
+        }
+
         const second = this.secondsRemaining % 60
 
         if (second < 10) {
@@ -48,6 +60,13 @@
         }
 
         return second
+      },
+      description() {
+        if (this.secondsRemaining <= 295) {
+          return 'do końca zadania pozostało...'
+        }
+
+        return 'trwa generacja nowego zadania...'
       },
     },
     methods: {
