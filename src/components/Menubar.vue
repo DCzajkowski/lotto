@@ -4,7 +4,7 @@
         <div class="logo"></div>
         <div class="tickets">
             <span class="ticket"/>
-            <p class="ticketnr">{{tickets}}</p>    
+            <p class="ticketnr">{{$store.state.tickets}}</p>    
         </div>
     </div>
 </template>
@@ -71,7 +71,6 @@ export default {
     },
     data(){
         return {
-            tickets: 5,
         }
     }
 };
