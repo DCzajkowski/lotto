@@ -87,11 +87,7 @@
         finishDate = new Date(finishDate.setMinutes(currentMinute + 5 - Math.floor(currentMinute % 5)))
         finishDate = finishDate.setSeconds(0)
 
-        const result = Math.floor((finishDate - Date.now()) / 1000)
-
-        if (result === 60 * 5) {
-          return 0
-        }
+        return Math.floor((finishDate - Date.now()) / 1000)
       },
     },
     created() {
