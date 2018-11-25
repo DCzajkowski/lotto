@@ -1,113 +1,152 @@
 <template>
-    
+  <div>
     <div ref="timer" class="timer" :class="$store.state.expanded ? 'timer-big':''">
+      <div class="minutes" :class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
+        {{ minutes }}
+      </div>
 
-        <div class="minutes" v-bind:class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
+      <div class="colon">:</div>
 
-            {{minutes}}
-        </div>
-
-            <div class="colon" >
-                :
-            </div>
-
-
-
-        <div class="seconds" v-bind:class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
-
-            {{seconds}}
-        </div>
-
-
-
+      <div class="seconds" :class="[minutes == 0 && seconds < 30 && seconds % 2 ? 'alert' : '']">
+        {{ seconds }}
+      </div>
     </div>
+
+    <div class="opis">{{ description }}</div>
+  </div>
 </template>
 
-
 <script>
-export default {
-    props: ['starttime'],
-  data() {
-    return {
-      minutes: '',
-      seconds: '',
-      start: 0,
-      end: 0,
-      timer:"",
-      wordString: {},
-      interval: "",
-      message:"",
-      statusType:"",
-      statusText: ""
-    };
-  },
-  methods: {
-    timerCount: function(start, end) {
-      // Get todays date and time
-      var now = new Date().getTime();
-      // Find the distance between now an the count down date
-      var distance = start - now;
-      var passTime = end - now;
-      if (distance < 0 && passTime < 0) {
-        this.message = this.wordString.expired;
-        this.statusType = "expired";
-        this.statusText = this.wordString.status.expired;
-        clearInterval(this.interval);
-        return;
-      } else if (distance < 0 && passTime > 0) {
-        this.calcTime(passTime);
-        // this.message = this.wordString.running;
-        this.statusType = "running";
-        // this.statusText = this.wordString.status.running;
-      } else if (distance > 0 && passTime > 0) {
-        this.calcTime(distance);
-        this.message = this.wordString.upcoming;
-        this.statusType = "upcoming";
-        this.statusText = this.wordString.status.upcoming;
+  export default {
+    // props: ['starttime'],
+    data() {
+      return {
+        // minutes: '',
+        // seconds: '',
+        // start: 0,
+        // end: 0,
+        // timer:'',
+        // wordString: {},
+        // interval: '',
+        // message:'',
+        // statusType:'',
+        // statusText: '',
+        secondsRemaining: 0,
       }
     },
-    calcTime: function(dist){
-      // Time calculations for days, hours, minutes and seconds
-        this.minutes = (Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60))).toString().padStart(2, '0')
-        this.seconds = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2, '0')
-    }
-  },
-  created() {
-    this.start = new Date()
-    this.end = new Date(this.starttime*1000)
-    setInterval(() => {this.timerCount(this.start, this.end)}, 1000)
+    computed: {
+      minutes() {
+        if (this.secondsRemaining > 295) {
+          return '00'
+        }
+
+        const minute = Math.floor(this.secondsRemaining / 60)
+
+        if (minute < 10) {
+          return `0${minute}`
+        }
+
+        return minute
+      },
+      seconds() {
+        if (this.secondsRemaining > 295) {
+          return '00'
+        }
+
+        const second = this.secondsRemaining % 60
+
+        if (second < 10) {
+          return `0${second}`
+        }
+
+        return second
+      },
+      description() {
+        if (this.secondsRemaining <= 295) {
+          return 'do końca zadania pozostało...'
+        }
+
+        return 'trwa generacja nowego zadania...'
+      },
+    },
+    methods: {
+      // timerCount(start, end) {
+      //   // Get todays date and time
+      //   let now = new Date().getTime()
+      //   // Find the distance between now an the count down date
+      //   let distance = start - now
+      //   let passTime = end - now
+
+      //   if (distance < 0 && passTime < 0) {
+      //     this.message = this.wordString.expired
+      //     this.statusType = "expired"
+      //     this.statusText = this.wordString.status.expired
+      //     clearInterval(this.interval)
+
+      //     return
+      //   } else if (distance < 0 && passTime > 0) {
+      //     this.calcTime(passTime)
+      //     this.statusType = "running"
+      //   } else if (distance > 0 && passTime > 0) {
+      //     this.calcTime(distance)
+      //     this.message = this.wordString.upcoming
+      //     this.statusType = "upcoming"
+      //     this.statusText = this.wordString.status.upcoming
+      //   }
+      // },
+      // calcTime(dist) {
+      //   // Time calculations for days, hours, minutes and seconds
+      //   this.minutes = (Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60))).toString().padStart(2, '0')
+      //   this.seconds = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2, '0')
+      // },
+      getSecondsRemaining() {
+        const currentMinute = new Date().getMinutes()
+
+        let finishDate = new Date()
+        finishDate = new Date(finishDate.setMinutes(currentMinute + 5 - Math.floor(currentMinute % 5)))
+        finishDate = finishDate.setSeconds(0)
+
+        return Math.floor((finishDate - Date.now()) / 1000)
+      },
+    },
+    created() {
+      // this.start = new Date()
+      // this.end = new Date((Date.now() + 5 * 60) * 1000)
+      // this.end.setMinutes()
+
+      setInterval(() => {
+        this.secondsRemaining = this.getSecondsRemaining()
+      }, 1000)
+    },
   }
-};
 </script>
-
-
 
 <style>
 * {
-    font-size: 27px;
+  font-size: 27px;
 }
 .minutes, .seconds {
-    background-color: floralwhite;
-    border: 1px solid #ffcc00;
-    color: #1e1e24;
-    padding: 5px;
-    border-radius: 6px;
-    font-weight: 900;
+  background-color: floralwhite;
+  border: 1px solid #ffcc00;
+  color: #1e1e24;
+  padding: 5px;
+  border-radius: 6px;
+  font-weight: 900;
 }
 .timer {
-    flex-direction: row;
-    display: flex;
-    height: 50px;
-    transform: scale(1,1);
-    transition: all 0.4s ease-in-out;
+  flex-direction: row;
+  display: flex;
+  height: 50px;
+  transform: scale(1,1);
+  transition: all 0.4s ease-in-out;
 }
 .timer-big{
-    transform: scale(1.8,1.8);
+  transform: scale(1.8,1.8);
 }
 .colon {
-    padding: 5px;
+  padding: 5px;
 }
 .alert {
-    color: rgb(207, 6, 19);
+  color: rgb(207, 6, 19);
 }
 </style>

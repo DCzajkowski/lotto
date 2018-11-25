@@ -9,6 +9,7 @@ export default new Vuex.Store({
     prize: 0,
     photo: false,
     phase: 0,
+    task: {},
     tickets: 5,
     old: 0,
   },
