@@ -1,27 +1,27 @@
 <template>
-    <div>
-      <menubar/>
-      <div class="nagroda" :class="$store.state.photo ? 'nagroda-hidden' : ''" > Oni już wygrali!</div>
-      <div :class="$store.state.expanded ? 'overlay': ''" @click.stop="hideWhitebox">
-        <maps />
-      </div>
-      <whitebox class='box'>
-        <timer starttime="1544099999"/>
-        <div class='opis'>do końca zadania</div>
-
-        <div v-if="$store.state.phase === 0" @click="startTask" class='join'> Rozpocznij zadanie 
-          <div class="tickets">
-            <p class="ticketnr">1</p>  
-            <span class="ticket"/>  
-         </div>
-        </div>
-
-        <div v-else-if="$store.state.phase === 1" class='description'> 
-          
-        </div>
-
-      </whitebox>
+  <div>
+    <menubar/>
+    <div class="nagroda" :class="$store.state.photo ? 'nagroda-hidden' : ''" > Oni już wygrali!</div>
+    <div :class="$store.state.expanded ? 'overlay': ''" @click.stop="hideWhitebox">
+      <maps />
     </div>
+    <whitebox class='box'>
+      <timer starttime="1544099999"/>
+      <div class='opis'>do końca zadania</div>
+
+      <div v-if="$store.state.phase === 0" @click="startTask" class='join'> Rozpocznij zadanie 
+        <div class="tickets">
+          <p class="ticketnr">1</p>  
+          <span class="ticket"/>  
+       </div>
+      </div>
+
+      <div v-else-if="$store.state.phase === 1" class='description'> 
+
+      </div>
+
+    </whitebox>
+  </div>
 </template>
 
 
