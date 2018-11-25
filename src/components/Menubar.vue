@@ -1,6 +1,6 @@
 <template>
     <div class='menubar'>
-        <hamburger/>
+        <div class='shop' @click="change"></div>
         <div class="logo"></div>
         <div class="tickets">
             <span class="ticket"/>
@@ -11,6 +11,14 @@
 
 
 <style>
+.shop{
+    height: 40px;
+    width: 40px;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/shoping.svg');
+}
 .menubar{
     display: flex;
     justify-content: space-between;
@@ -28,7 +36,7 @@
 }
 .logo{
     height: 60px;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     width: 100px;
     background-size: contain;
     background-position: center center;
@@ -71,6 +79,16 @@ export default {
     },
     data(){
         return {
+        }
+    },
+    methods:{
+        change(){
+            if (this.$store.state.phase != -1){
+                this.$store.state.old = this.$store.state.phase; this.$store.state.phase=-1;
+            }else{
+                this.$store.state.phase= this.$store.state.old 
+            }
+            
         }
     }
 };

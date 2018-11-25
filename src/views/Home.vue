@@ -19,6 +19,25 @@
         <div v-else-if="$store.state.phase === 1" class='task'> 
           <p class='tekst'>Sfotografuj zółty samochód</p> 
           <div class='aparat'></div>
+        </div>
+
+        <div v-else-if="$store.state.phase === -1" class='task'> 
+          <div class="zakupy" @click="buy(1)">
+            <p class="lol">2zł</p>
+            <p class="lol">--></p> 
+            <div class="tickets">
+                <p class="ticketnr">1</p>  
+                <span class="ticket"/>  
+            </div>
+          </div>
+          <div class="zakupy" @click="buy(6)">
+            <p class="lol">10zł</p>
+            <p class="lol">--></p> 
+            <div class="tickets">
+                <p class="ticketnr">6</p>  
+                <span class="ticket"/>  
+            </div>
+          </div>
         </div> 
 
         <!-- <div v-else-if="$store.state.phase === 2" class='task'> 
@@ -37,6 +56,24 @@ body{
   height: 100vh;
   overflow: hidden;
 }
+.lol{
+  font-size: 20px;
+  font-weight: 700;
+  color:#f78d1d;
+}
+.zakupy{
+  align-items: center;
+  width: 280px;
+  height: 30px;
+  padding: 5px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 4px #f78d1d;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px !important; 
+}
+
 .footer{
   position: absolute;
   bottom: 0px;
@@ -46,7 +83,7 @@ body{
 }
 .aparat{
   height: 80px;
-  margin: 20px auto;
+  margin: 10px auto;
   background-image: url('../assets/mono-gtk-camera.svg');
   background-position: center, center;
   background-repeat: no-repeat;
@@ -183,8 +220,17 @@ export default {
     },
     startTask(){
       console.log('cos')
-      this.$store.state.phase+=1
-      this.$store.state.tickets-=1
+      if (this.$store.state.tickets > 0){
+        this.$store.state.phase+=1
+        this.$store.state.tickets-=1
+      }else{
+        this.old = this.$store.state.phase
+        this.$store.state.phase-=1
+      }
+    },
+    buy(ilosc){
+      this.$store.state.tickets+=ilosc
+      this.$store.state.phase = this.$store.state.old
     }
   },
   mounted(){
